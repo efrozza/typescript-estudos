@@ -1,3 +1,4 @@
+import { logarTempoExecucao } from '../helpers/decorators/index';
 import { Negociacao } from './Negociacao';
 
 export class Negociacoes {
@@ -16,6 +17,6 @@ export class Negociacoes {
     // retornamos um novo array pelo principio de programação defensiva.
     // o array retornado eh uma copia do nosso array original ,então se for apagado ou alterado
     // não interfere no array original
-    return [].concat(this._negociacoes);
+    return ([] as Negociacao[]).concat(this._negociacoes);
   }
 }

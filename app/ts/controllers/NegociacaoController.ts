@@ -7,7 +7,7 @@ export class NegociacaoController {
   private _inputValor: JQuery;
   private _negociacoes: Negociacoes = new Negociacoes();
   // cria um atributo para view, passando o seletor '#negociacoesView'
-  private _negociacoesView = new NegociacoesView('#negociacoesView');
+  private _negociacoesView = new NegociacoesView('#negociacoesView', true);
   private _mensagemView = new MensagemView('#mensagemView');
 
   constructor() {
@@ -16,19 +16,45 @@ export class NegociacaoController {
     this._inputValor = $('#valor');
     this._negociacoesView.update(this._negociacoes);
   }
+
   adiciona(event: Event) {
     event.preventDefault();
 
+    let data = new Date(this._inputData.val().replace(/-/g, ','));
+
+    // valida dia útil 0 domingo e 6 sabado
+    if (!this.ehDiaUtil(data)) {
+      this._mensagemView.update('Data inválida. Informe um dia útil!');
+      return;
+    }
+
     const negociacao = new Negociacao(
-      new Date(this._inputData.val().replace(/-/g, ',')),
+      data,
       parseInt(this._inputQuantidade.val()),
       parseFloat(this._inputValor.val()),
     );
     this._negociacoes.adiciona(negociacao);
-    this._negociacoes
-      .paraArray()
-      .map(negociacao => console.log(negociacao.data));
     this._negociacoesView.update(this._negociacoes);
     this._mensagemView.update('Negociação adicionada com sucesso');
   }
+
+  private ehDiaUtil(data: Date): boolean {
+    return data.getDay() != DiaDaSemana.Sábado &&
+      data.getDay() != DiaDaSemana.Domingo
+      ? true
+      : false;
+  }
+}
+
+enum DiaDaSemana {
+  // por default a enum começa em zero,
+  // porem podemos setar um valor inicial, por exemplo Domingo = 1,
+  // o proximo dia será 2 e assim por diante.
+  Domingo,
+  Segunda,
+  Terça,
+  Quarta,
+  Quinta,
+  Sexta,
+  Sábado,
 }
