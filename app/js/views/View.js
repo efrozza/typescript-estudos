@@ -1,9 +1,19 @@
-class View {
-    constructor(seletor) {
-        this._elemento = document.querySelector(seletor);
-    }
-    // passa o templete para o innerHTML renderizar elementos do DOM no elemento definido
-    update(modelo) {
-        this._elemento.innerHTML = this.template(modelo);
-    }
-}
+System.register([], function (exports_1, context_1) {
+    "use strict";
+    var View;
+    var __moduleName = context_1 && context_1.id;
+    return {
+        setters: [],
+        execute: function () {
+            View = class View {
+                constructor(seletor) {
+                    this._elemento = $(seletor);
+                }
+                update(modelo) {
+                    this._elemento.html(this.template(modelo));
+                }
+            };
+            exports_1("View", View);
+        }
+    };
+});
